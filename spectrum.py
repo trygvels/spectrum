@@ -5,7 +5,6 @@ import numpy as np
 import sys
 import math
 from brokenaxes import brokenaxes
-dir = "/Users/svalheim/work/jastro/spectrum/"
 #plt.style.use(u"trygveplot_astro")
 
 params = {'savefig.dpi'        : 300, # save figures to 300 dpi
@@ -38,7 +37,7 @@ def cmb(nu, A):
 def sync(nu, As, alpha, nuref=0.408):
     #alpha = 1., As = 30 K (30*1e6 muK)
     nu_0 = nuref*1e9 # 408 MHz
-    fnu, f = np.loadtxt(dir+"Synchrotron_template_GHz_extended.txt", unpack=True)
+    fnu, f = np.loadtxt("Synchrotron_template_GHz_extended.txt", unpack=True)
     f = np.interp(nu, fnu*1e9, f)
     f0 = np.interp(nu_0, nu, f) # Value of s at nu_0
     s_s = As*(nu_0/nu)**2*f/f0
@@ -469,13 +468,8 @@ ax.set_ylim(ymin,ymax)
 #ax.legend(loc=6,prop={'size': 20}, frameon=False)
 
 # ---- Plotting ----
-#plt.savefig(dir+"figs/spectrum_extended.png", bbox_inches='tight',  pad_inches=0.02)
 plt.tight_layout(h_pad=0.3)
-#plt.savefig(dir+"figs/spectrum_extended.png", bbox_inches='tight',  pad_inches=0.02)
-#plt.savefig(dir+"figs/spectrum_extended.pdf", bbox_inches='tight',  pad_inches=0.02)
-#plt.savefig(dir+"figs/spectrum_daniel.png", bbox_inches='tight',  pad_inches=0.02)
-
-filename = dir + "figs/spectrum"
+filename ="figs/spectrum"
 filename += "_pol" if pol else ""
 filename += "_long" if long else ""
 plt.savefig(filename+".png", bbox_inches='tight',  pad_inches=0.02)
