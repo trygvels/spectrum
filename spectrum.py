@@ -89,6 +89,7 @@ def lf(nu,Alf,betalf):
 # ---- Calculating spectra ----
 pol = False
 long = True
+lowfreq = True
 
 N = 1000
 nu    = np.logspace(np.log10(0.1),np.log10(5000),N) #Text scaled to 0.2, 5000
@@ -217,13 +218,14 @@ if pol:
     col=["C9","C2","C3","C7"]
     label=["CMB", "Synchrotron","Thermal Dust", "Sum fg."]
     if long:
-        rot=[-20, -50,22, -10] #mid
+        rot=[-20, -50,22, -10] 
         idx=[70, 53,  115, -15]
         scale=[0.05, 0, 11, 2]
     else:
-        rot=[-20, -45, 18, -10] #Regular
+        rot=[-20, -45, 18, -10]
         idx=[70, 53,  115, -15]
         scale=[0.05, 0, 7, 2]
+
 
 else:
     sumf = FF+SYNC+SDUST+TDUST
@@ -235,10 +237,12 @@ else:
         idx=[17, 50, 50, -10, 160, -90]
         scale=[5,0,0,0,200,300]
     else:  
-        rot=[-8, -35, -45, -70, 13, -40] #Regular
+        rot=[-8, -35, -45, -70, 13, -40] 
         idx=[17, 60, 60, -10, 160, -90]
         scale=[5,0,0,0,150,300]
 
+    if lowfreq:
+        rot=[-8, -37, -47, -70, 13, -43]
 
 idxshift = 600
 idx = [x + idxshift for x in idx]
@@ -436,7 +440,7 @@ if wmap:
         ax2.axvspan(band_range7[0],band_range7[1],color='C9',alpha=baralpha, zorder=0)
 
 # ---- Plotting DIRBE ----
-if dirbe and not pol and long:
+if dirbe and not pol and long and not lowfreq:
     ax2.text(1000  ,ymax2-0.2,"DIRBE \n 1249",color='C3', va='bottom',alpha=1, size = freqtext)
     ax2.text(1750  ,ymax2-0.2,"2141",color='C3', va='bottom',alpha=1, size = freqtext)
     ax2.text(2500  ,ymax2-0.2,"2998",color='C3', va='bottom',alpha=1, size = freqtext)
@@ -462,6 +466,8 @@ ax2.tick_params(which="both",direction="in")
 plt.ylabel(r"Brightness temperature [$\mu$K]",fontsize=labelsize)
 plt.xlabel(r"Frequency [GHz]",fontsize=labelsize)
 
+if lowfreq:
+    xmax = 1000
 if long:
     ax2.set_ylim(ymax15,ymax2)
     ax2.set_xlim(xmin,xmax)
