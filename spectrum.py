@@ -198,8 +198,8 @@ if long:
     ax.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
 
     freqtext = 16
-    fgtext = 16
-    labelsize = 16
+    fgtext = 18
+    labelsize = 20
     ticksize = 20
 
 else:
@@ -235,13 +235,13 @@ if pol:
     col=["C9","C2","C3","C7"]
     label=["CMB", "Synchrotron","Thermal Dust", "Sum fg."]
     if long:
-        rot=[-20, -50,22, -10] 
-        idx=[70, 53,  115, -15]
-        scale=[0.05, 0, 11, 2]
+        rot=[-25, -51,22, -10] 
+        idx=[70, -120,  115, -15]
+        scale=[0.05, 0, 13.5, 2]
     else:
         rot=[-20, -45, 18, -10]
-        idx=[70, 53,  115, -15]
-        scale=[0.05, 0, 7, 2]
+        idx=[70, -120,  115, -15]
+        scale=[0.05, 0, 10, 2]
 
 
 else:
