@@ -1,4 +1,5 @@
 from matplotlib import rcParams, rc
+import matplotlib.patheffects as path_effects
 import matplotlib.ticker as ticker
 import matplotlib.pyplot as plt
 import numpy as np
@@ -8,10 +9,6 @@ from brokenaxes import brokenaxes
 #plt.style.use(u"trygveplot_astro")
 
 params = {'savefig.dpi'        : 300, # save figures to 300 dpi
-          'ytick.major.size'   : 6,
-          'ytick.minor.size'   : 3,
-          'xtick.major.size'   : 6,
-          'xtick.minor.size'   : 3,
           'xtick.top'          : False,
           'ytick.right'        : True, #Set to false
           'axes.spines.top'    : True, #Set to false
@@ -19,7 +16,16 @@ params = {'savefig.dpi'        : 300, # save figures to 300 dpi
           'axes.spines.left'   : True,
           'axes.spines.right'  : True, #Set to false
           'axes.grid.axis'     : 'y',
-          'axes.grid'          : False
+          'axes.grid'          : False,
+          'ytick.major.size'   : 12,
+          'ytick.minor.size'   : 6,
+          'xtick.major.size'   : 12,
+          'xtick.minor.size'   : 6,
+          
+          #'ytick.major.size'   : 6,
+          #'ytick.minor.size'   : 3,
+          #'xtick.major.size'   : 6,
+          #'xtick.minor.size'   : 3,
           }
 
 rcParams.update(params)
@@ -88,8 +94,8 @@ def lf(nu,Alf,betalf):
 
 # ---- Calculating spectra ----
 pol = False
-long = True
-lowfreq = True
+long = False
+lowfreq = False
 
 N = 1000
 nu    = np.logspace(np.log10(0.1),np.log10(5000),N) #Text scaled to 0.2, 5000
@@ -199,9 +205,9 @@ else:
     ax2 = ax
 
 freqtext = 16
-fgtext = 16
-labelsize = 18
-ticksize = 16
+fgtext = 20
+labelsize = 20
+ticksize = 20
 
 
 if pol:
@@ -237,8 +243,8 @@ else:
         idx=[17, 50, 50, -10, 160, -90]
         scale=[5,0,0,0,200,300]
     else:  
-        rot=[-8, -35, -45, -70, 13, -40] 
-        idx=[17, 60, 60, -10, 160, -90]
+        rot=[-8, -35, -46, -70, 13, -40] 
+        idx=[17, 60, 58, -10, 160, -90]
         scale=[5,0,0,0,150,300]
 
     if lowfreq:
@@ -275,7 +281,7 @@ for i in range(len(fgs)):
 
     #ax.loglog(nu,fgs[i], linewidth=4,color=col[i])
     #ax2.loglog(nu,fgs[i], linewidth=4,color=col[i])
-    ax.text(nu[idx[i]], fgs[i][1,idx[i]]+scale[i], label[i], rotation=rot[i], color=col[i],fontsize=fgtext)
+    ax.text(nu[idx[i]], fgs[i][1,idx[i]]+scale[i], label[i], rotation=rot[i], color=col[i],fontsize=fgtext,  path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
 
     ax.set_xscale("log")
     ax.set_yscale("log")
@@ -283,7 +289,7 @@ for i in range(len(fgs)):
     ax2.set_yscale("log")
 
 # ---- Plotting sum of all foregrounds ----        
-ax.text(nu[idx[-1]], fgs[-1][1,idx[-1]]+scale[-1], label[-1], rotation=rot[-1], color='k', fontsize=fgtext, alpha=0.7)
+ax.text(nu[idx[-1]], fgs[-1][1,idx[-1]]+scale[-1], label[-1], rotation=rot[-1], color='k', fontsize=fgtext, alpha=0.7,  path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
 
 
 def find_nearest(array, value):
@@ -387,8 +393,8 @@ if quijote:
 if planck:
     ax2.text(27-2,ymax2-0.2,"30",  color='C1', va='bottom',alpha=1, size = freqtext)
     ax2.text(42+2,ymax2-0.2,"44",  color='C1', va='bottom',alpha=1, size = freqtext)
-    ax2.text(64,  ymax2-0.2,"Planck \n 70",  color='C1', va='bottom',alpha=1, size = freqtext)
-    ax2.text(90+5,ymax2-0.2,"100", color='C1', va='bottom',alpha=1, size = freqtext)
+    ax2.text(64,  ymax2-0.2,"70",  color='C1', va='bottom',alpha=1, size = freqtext)
+    ax2.text(90+5,ymax2-0.2,"Planck \n 100", color='C1', va='bottom',alpha=1, size = freqtext)
     ax2.text(135, ymax2-0.2,"143", color='C1', va='bottom',alpha=1, size = freqtext)
     ax2.text(200, ymax2-0.2,"217", color='C1', va='bottom',alpha=1, size = freqtext)
     ax2.text(330, ymax2-0.2,"353", color='C1', va='bottom',alpha=1, size = freqtext)
@@ -481,6 +487,7 @@ plt.tight_layout(h_pad=0.3)
 filename ="figs/spectrum"
 filename += "_pol" if pol else ""
 filename += "_long" if long else ""
+filename += "_lowfreq" if lowfreq else ""
 plt.savefig(filename+".png", bbox_inches='tight',  pad_inches=0.02)
 #plt.show()
 
