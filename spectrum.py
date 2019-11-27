@@ -14,14 +14,18 @@ params = {'savefig.dpi'        : 300, # save figures to 300 dpi
           'axes.spines.top'    : True, #Set to false
           'axes.spines.bottom' : True,
           'axes.spines.left'   : True,
-          'axes.spines.right'  : True, #Set to false
+          'axes.spines.right'  : True, #Set to false@
           'axes.grid.axis'     : 'y',
           'axes.grid'          : False,
-          'ytick.major.size'   : 12,
-          'ytick.minor.size'   : 6,
-          'xtick.major.size'   : 12,
-          'xtick.minor.size'   : 6,
-          
+          'ytick.major.size'   : 10,
+          'ytick.minor.size'   : 5,
+          'xtick.major.size'   : 10,
+          'xtick.minor.size'   : 5,
+          'ytick.major.width'   : 1.5,
+          'ytick.minor.width'   : 1.5,
+          'xtick.major.width'   : 1.5,
+          'xtick.minor.width'   : 1.5,
+          'axes.linewidth'      : 1.5,
           #'ytick.major.size'   : 6,
           #'ytick.minor.size'   : 3,
           #'xtick.major.size'   : 6,
@@ -94,7 +98,7 @@ def lf(nu,Alf,betalf):
 
 # ---- Calculating spectra ----
 pol = False
-long = False
+long = True
 lowfreq = False
 
 N = 1000
@@ -193,6 +197,11 @@ if long:
     ax.plot((-d, +d), (1 - d, 1 + d), **kwargs)  # bottom-left diagonal
     ax.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
 
+    freqtext = 16
+    fgtext = 16
+    labelsize = 16
+    ticksize = 20
+
 else:
     xmin=10
     xmax=1000
@@ -204,10 +213,12 @@ else:
     fig, ax = plt.subplots(1,1,figsize=(12,8))
     ax2 = ax
 
-freqtext = 16
-fgtext = 20
-labelsize = 20
-ticksize = 20
+    freqtext = 20
+    fgtext = 20
+    labelsize = 20
+    ticksize = 20
+
+
 
 
 if pol:
@@ -297,21 +308,21 @@ def find_nearest(array, value):
     idx = (np.abs(array - value)).argmin()
     return array[idx]
 
-#ax.text(10, find_nearest(fgs[-1], 10), label[-1], rotation=rot[-1], color=col[-1],fontsize=fgtext)
+#ax.text(10, find_nearest(fgs[-1], 10), label[-1], rotation=rot[-1], color=col[-1],fontsize=fgtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
 
 if not pol:
     # ---- Plotting CO lines ----
-    ax.axvline(x=115., color='k', alpha=0.7)
-    ax.axvline(x=230., color='k', alpha=0.7)
-    ax.axvline(x=345., color='k', alpha=0.7)
-    if long:
-        ax2.axvline(x=115., color='k', alpha=0.7)
-        ax2.axvline(x=230., color='k', alpha=0.7)
-        ax2.axvline(x=345., color='k', alpha=0.7)
+    co10amp=50
+    co21amp=co10amp*0.5
+    co32amp=co10amp*0.2
 
-    ax2.text(115.,ymax2, "CO 1-0 ", color='k', alpha=0.7, ha='right',va='top',rotation=90,fontsize=fgtext)
-    ax2.text(230.,ymax2, "CO 2-1 ", color='k', alpha=0.7, ha='right',va='top',rotation=90,fontsize=fgtext)
-    ax2.text(345.,ymax2, "CO 3-2 ", color='k', alpha=0.7, ha='right',va='top',rotation=90,fontsize=fgtext)
+    ax.bar(115., co10amp, color='k', width=1,)
+    ax.bar(230., co21amp, color='k', width=2,)
+    ax.bar(345., co32amp, color='k', width=3,)
+    
+    ax.text(115.*0.99,co10amp*0.33, r"CO$_{1\rightarrow 0}$", color='k', alpha=0.7, ha='right',va='top',rotation=90,fontsize=fgtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax.text(230.*0.99,co21amp*0.33, r"CO$_{2\rightarrow 1}$", color='k', alpha=0.7, ha='right',va='top',rotation=90,fontsize=fgtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax.text(345.*0.99,co32amp*0.33, r"CO$_{3\rightarrow 2}$", color='k', alpha=0.7, ha='right',va='top',rotation=90,fontsize=fgtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
 
 # ---- Data band ranges ----
 band_range1   = [.406,.410]      # Haslam?
@@ -342,38 +353,42 @@ band_range25  = [26.,36.]      # QUIJOTE
 band_range26  = [35.,47.]      # QUIJOTE
 band_range27  = [1.3945-0.064/2,1.3945+0.064/2]  #CHIPASS
 
+if long:
+    yscaletext = 0.80
+else:
+    yscaletext = 0.97
 
 # ---- Plotting single data ----
 if long:
     if haslam and not pol:
-        ax2.text(np.mean(band_range1),ymax2-0.2,"Haslam \n 0.408",color='purple',va='bottom',horizontalalignment='center', size = freqtext)
+        ax2.text(np.mean(band_range1),ymax2*yscaletext,"0.408\nHaslam",color='purple',va='top',horizontalalignment='center', size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
         ax.axvspan(band_range1[0],band_range1[1],color='purple',alpha=baralpha, zorder=0,label="Haslam")
         ax2.axvspan(band_range1[0],band_range1[1],color='purple',alpha=baralpha, zorder=0)
 
     if spass:
-        ax2.text(np.mean(band_range2)+.1 ,ymax2-0.2," S-PASS \n 2.303",color='green',va='bottom',horizontalalignment='center', size = freqtext)
+        ax2.text(np.mean(band_range2)+.1 ,ymax2*yscaletext,"2.303\nS-PASS",color='green',va='top',horizontalalignment='center', size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
         ax.axvspan(band_range2[0],band_range2[1],color='green',alpha=baralpha, zorder=0, label="S-PASS")
         ax2.axvspan(band_range2[0],band_range2[1],color='green',alpha=baralpha, zorder=0)
 
     if cbass:
-        ax2.text(np.mean(band_range20),ymax2-0.2,"C-BASS \n 5.0",color='C0',va='bottom',horizontalalignment='center', size = freqtext)
+        ax2.text(np.mean(band_range20),ymax2*yscaletext,"5.0\nC-BASS",color='C0',va='top',horizontalalignment='center', size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
         ax.axvspan(band_range20[0],band_range20[1],color='C0',alpha=baralpha, zorder=0, label="C-BASS")
         ax2.axvspan(band_range20[0],band_range20[1],color='C0',alpha=baralpha, zorder=0)
 
     if chipass and not pol:
-        ax2.text(np.mean(band_range27)-0.1,ymax2-0.2,"CHIPASS \n 1.394",color='C5', va='bottom',horizontalalignment='center', size = freqtext)
+        ax2.text(np.mean(band_range27)-0.1,ymax2*yscaletext,"1.394\nCHIPASS",color='C5', va='top',horizontalalignment='center', size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
         ax.axvspan(band_range27[0],band_range27[1],color='C5',alpha=baralpha, zorder=0,label='CHIPASS')
         ax2.axvspan(band_range27[0],band_range27[1],color='C5',alpha=baralpha, zorder=0)
 
 
 # ---- Plotting QUIJOTE ----
 if quijote:
-    ax2.text(11,ymax2-0.2,"QUIJOTE \n 11",  color='C4', va='bottom',alpha=1,horizontalalignment='center', size = freqtext)
-    ax2.text(13,ymax2-0.2,"13",  color='C4', va='bottom',alpha=1,horizontalalignment='center', size = freqtext)
-    ax2.text(17,ymax2-0.2,"17",  color='C4', va='bottom',alpha=1,horizontalalignment='center', size = freqtext)
-    ax2.text(19+1,ymax2-0.2,"19", color='C4', va='bottom',alpha=1,horizontalalignment='center', size = freqtext)
-    ax2.text(31,ymax2-0.2,"31",color='C4', va='bottom',alpha=1,horizontalalignment='center', size = freqtext)
-    ax2.text(41+1,ymax2-0.2,"41",color='C4', va='bottom',alpha=1,horizontalalignment='center', size = freqtext)
+    ax2.text(11,ymax2*yscaletext,"11\nQUIJOTE",  color='C4', va='top',alpha=1,horizontalalignment='center', size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(13,ymax2*yscaletext,"13",  color='C4', va='top',alpha=1,horizontalalignment='center', size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(17,ymax2*yscaletext,"17",  color='C4', va='top',alpha=1,horizontalalignment='center', size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(19+1,ymax2*yscaletext,"19", color='C4', va='top',alpha=1,horizontalalignment='center', size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(31,ymax2*yscaletext,"31",color='C4', va='top',alpha=1,horizontalalignment='center', size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(41+1,ymax2*yscaletext,"41",color='C4', va='top',alpha=1,horizontalalignment='center', size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
 
     ax.axvspan(band_range21[0], band_range21[1], color='C4',alpha=baralpha, zorder=0, label="QUIJOTE")
     ax.axvspan(band_range22[0], band_range22[1], color='C4',alpha=baralpha, zorder=0)
@@ -391,13 +406,13 @@ if quijote:
 
 # ---- Plotting Planck ----
 if planck:
-    ax2.text(27-2,ymax2-0.2,"30",  color='C1', va='bottom',alpha=1, size = freqtext)
-    ax2.text(42+2,ymax2-0.2,"44",  color='C1', va='bottom',alpha=1, size = freqtext)
-    ax2.text(64,  ymax2-0.2,"70",  color='C1', va='bottom',alpha=1, size = freqtext)
-    ax2.text(90+5,ymax2-0.2,"Planck \n 100", color='C1', va='bottom',alpha=1, size = freqtext)
-    ax2.text(135, ymax2-0.2,"143", color='C1', va='bottom',alpha=1, size = freqtext)
-    ax2.text(200, ymax2-0.2,"217", color='C1', va='bottom',alpha=1, size = freqtext)
-    ax2.text(330, ymax2-0.2,"353", color='C1', va='bottom',alpha=1, size = freqtext)
+    ax2.text(27-2,ymax2*yscaletext,"30",           color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(42+2,ymax2*yscaletext,"44",           color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(64,  ymax2*yscaletext,"70",           color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(90+2,ymax2*yscaletext,"100\nPlanck", color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(130, ymax2*yscaletext,"143",          color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(195, ymax2*yscaletext,"217",          color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(320, ymax2*yscaletext,"353",          color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
 
     ax.axvspan(band_range8[0] ,band_range8[1], color='C1',alpha=baralpha, zorder=0, label="Planck")
     ax.axvspan(band_range9[0] ,band_range9[1], color='C1',alpha=baralpha, zorder=0)
@@ -417,8 +432,8 @@ if planck:
         ax2.axvspan(band_range14[0],band_range14[1],color='C1',alpha=baralpha, zorder=0)
 
     if not pol:
-        ax2.text(490, ymax2-0.2,"545", color='C1', va='bottom',alpha=1, size = freqtext)
-        ax2.text(770, ymax2-0.2,"857", color='C1', va='bottom',alpha=1, size = freqtext)
+        ax2.text(490, ymax2*yscaletext,"545", color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+        ax2.text(730, ymax2*yscaletext,"857", color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
         ax.axvspan(band_range15[0],band_range15[1],color='C1',alpha=baralpha, zorder=0)
         ax.axvspan(band_range16[0],band_range16[1],color='C1',alpha=baralpha, zorder=0)
         if long:
@@ -427,11 +442,11 @@ if planck:
 
 # ---- Plotting WMAP ----
 if wmap:
-    ax2.text(22.8 -2  , ymax2-0.2,"WMAP \n K ", color='C9' ,va='bottom',alpha=1, size = freqtext)
-    ax2.text(31.5   , ymax2-0.2,"Ka",color='C9', va='bottom',alpha=1, size = freqtext)
-    ax2.text(39.  , ymax2-0.2,"Q", color='C9' ,va='bottom',alpha=1, size = freqtext)
-    ax2.text(58.    , ymax2-0.2,"V", color='C9' ,va='bottom',alpha=1, size = freqtext)
-    ax2.text(90.-8   , ymax2-0.2,"W", color='C9' ,va='bottom',alpha=1, size = freqtext)
+    ax2.text(22.8 -2  , ymax2*yscaletext,"K", color='C9' ,va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(31.5   ,   ymax2*yscaletext,"Ka\nWMAP ",        color='C9', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(39.  ,     ymax2*yscaletext,"Q",         color='C9' ,va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(58.    ,   ymax2*yscaletext,"V",         color='C9' ,va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(90.-8   ,  ymax2*yscaletext,"W",         color='C9' ,va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
 
     ax.axvspan(band_range3[0],band_range3[1],color='C9',alpha=baralpha, zorder=0,label='WMAP')
     ax.axvspan(band_range4[0],band_range4[1],color='C9',alpha=baralpha, zorder=0)
@@ -447,9 +462,9 @@ if wmap:
 
 # ---- Plotting DIRBE ----
 if dirbe and not pol and long and not lowfreq:
-    ax2.text(1000  ,ymax2-0.2,"DIRBE \n 1249",color='C3', va='bottom',alpha=1, size = freqtext)
-    ax2.text(1750  ,ymax2-0.2,"2141",color='C3', va='bottom',alpha=1, size = freqtext)
-    ax2.text(2500  ,ymax2-0.2,"2998",color='C3', va='bottom',alpha=1, size = freqtext)
+    ax2.text(1000  ,ymax2*yscaletext,"1249\nDIRBE",color='C3', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(1750  ,ymax2*yscaletext,"2141",color='C3', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(2500  ,ymax2*yscaletext,"2998",color='C3', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
 
     ax.axvspan(band_range17[0],band_range17[1],color='C3',alpha=baralpha, zorder=0,label='DIRBE')
     ax.axvspan(band_range18[0],band_range18[1],color='C3',alpha=baralpha, zorder=0)
