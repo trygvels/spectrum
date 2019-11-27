@@ -87,7 +87,7 @@ def lf(nu,Alf,betalf):
 
 
 # ---- Calculating spectra ----
-pol = True
+pol = False
 long = True
 
 N = 1000
@@ -170,21 +170,21 @@ if long:
     ymax=7e2
     ymax2=1e8#ymax+1e8
     ymax15=1000#ymax+500
-    freqtext = 12
-    fgtext = 16
 
     fig, (ax2, ax) = plt.subplots(2,1,sharex=True,figsize=(16,8),gridspec_kw = {'height_ratios':[1, ratio]})
     ax2.spines['bottom'].set_visible(False)
     ax.spines['top'].set_visible(False)
-    ax2.tick_params(labelbottom='off')
+    ax2.tick_params(labelbottom=False)
     ax2.xaxis.set_ticks_position('none')
 
     # ---- Adding broken axis lines ----
     d = .005  # how big to make the diagonal lines in axes coordinates
     kwargs = dict(transform=ax2.transAxes, color='k', clip_on=False)
     ax2.plot((-d, +d), (-d*ratio, + d*ratio), **kwargs)        # top-left diagonal
+    ax2.plot((1 - d, 1 + d), (-d*ratio, +d*ratio), **kwargs)  # top-right diagonal
     kwargs.update(transform=ax.transAxes)  # switch to the bottom axes
     ax.plot((-d, +d), (1 - d, 1 + d), **kwargs)  # bottom-left diagonal
+    ax.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
 
 else:
     xmin=10
@@ -193,11 +193,14 @@ else:
     ymax=7e2
     ymax2=ymax
     ymax15=ymax
-    freqtext = 12
-    fgtext = 16
 
     fig, ax = plt.subplots(1,1,figsize=(12,8))
     ax2 = ax
+
+freqtext = 16
+fgtext = 16
+labelsize = 18
+ticksize = 16
 
 
 if pol:
@@ -338,7 +341,7 @@ if long:
         ax2.axvspan(band_range1[0],band_range1[1],color='purple',alpha=baralpha, zorder=0)
 
     if spass:
-        ax2.text(np.mean(band_range2),ymax2-0.2," S-PASS \n 2.303",color='green',va='bottom',horizontalalignment='center', size = freqtext)
+        ax2.text(np.mean(band_range2)+.1 ,ymax2-0.2," S-PASS \n 2.303",color='green',va='bottom',horizontalalignment='center', size = freqtext)
         ax.axvspan(band_range2[0],band_range2[1],color='green',alpha=baralpha, zorder=0, label="S-PASS")
         ax2.axvspan(band_range2[0],band_range2[1],color='green',alpha=baralpha, zorder=0)
 
@@ -348,7 +351,7 @@ if long:
         ax2.axvspan(band_range20[0],band_range20[1],color='C0',alpha=baralpha, zorder=0)
 
     if chipass and not pol:
-        ax2.text(np.mean(band_range27),ymax2-0.2,"CHIPASS \n 1.394",color='C5', va='bottom',horizontalalignment='center', size = freqtext)
+        ax2.text(np.mean(band_range27)-0.1,ymax2-0.2,"CHIPASS \n 1.394",color='C5', va='bottom',horizontalalignment='center', size = freqtext)
         ax.axvspan(band_range27[0],band_range27[1],color='C5',alpha=baralpha, zorder=0,label='CHIPASS')
         ax2.axvspan(band_range27[0],band_range27[1],color='C5',alpha=baralpha, zorder=0)
 
@@ -414,11 +417,11 @@ if planck:
 
 # ---- Plotting WMAP ----
 if wmap:
-    ax2.text(22.8,ymax2-0.2,"WMAP \n K ", color='C9' ,va='bottom',alpha=1, size = freqtext)
-    ax2.text(31.5+1,ymax2-0.2,"Ka",color='C9', va='bottom',alpha=1, size = freqtext)
-    ax2.text(39.-2, ymax2-0.2,"Q", color='C9' ,va='bottom',alpha=1, size = freqtext)
-    ax2.text(58., ymax2-0.2,"V", color='C9' ,va='bottom',alpha=1, size = freqtext)
-    ax2.text(90.-5, ymax2-0.2,"W", color='C9' ,va='bottom',alpha=1, size = freqtext)
+    ax2.text(22.8 -2  , ymax2-0.2,"WMAP \n K ", color='C9' ,va='bottom',alpha=1, size = freqtext)
+    ax2.text(31.5   , ymax2-0.2,"Ka",color='C9', va='bottom',alpha=1, size = freqtext)
+    ax2.text(39.  , ymax2-0.2,"Q", color='C9' ,va='bottom',alpha=1, size = freqtext)
+    ax2.text(58.    , ymax2-0.2,"V", color='C9' ,va='bottom',alpha=1, size = freqtext)
+    ax2.text(90.-8   , ymax2-0.2,"W", color='C9' ,va='bottom',alpha=1, size = freqtext)
 
     ax.axvspan(band_range3[0],band_range3[1],color='C9',alpha=baralpha, zorder=0,label='WMAP')
     ax.axvspan(band_range4[0],band_range4[1],color='C9',alpha=baralpha, zorder=0)
@@ -434,9 +437,9 @@ if wmap:
 
 # ---- Plotting DIRBE ----
 if dirbe and not pol and long:
-    ax2.text(1100,ymax2-0.2,"DIRBE \n 1249",color='C3', va='bottom',alpha=1, size = freqtext)
-    ax2.text(1800,ymax2-0.2,"2141",color='C3', va='bottom',alpha=1, size = freqtext)
-    ax2.text(2700,ymax2-0.2,"2998",color='C3', va='bottom',alpha=1, size = freqtext)
+    ax2.text(1000  ,ymax2-0.2,"DIRBE \n 1249",color='C3', va='bottom',alpha=1, size = freqtext)
+    ax2.text(1750  ,ymax2-0.2,"2141",color='C3', va='bottom',alpha=1, size = freqtext)
+    ax2.text(2500  ,ymax2-0.2,"2998",color='C3', va='bottom',alpha=1, size = freqtext)
 
     ax.axvspan(band_range17[0],band_range17[1],color='C3',alpha=baralpha, zorder=0,label='DIRBE')
     ax.axvspan(band_range18[0],band_range18[1],color='C3',alpha=baralpha, zorder=0)
@@ -450,14 +453,14 @@ if dirbe and not pol and long:
 ax.set_xticks(np.append(ax.get_xticks(),[3,30,300,3000]))
 ax.set_xticklabels(np.append(ax.get_xticks(),300))
 ax.xaxis.set_major_formatter(ticker.ScalarFormatter(useMathText=True))
-ax.tick_params(axis='both', which='major', labelsize=16, direction='in')
+ax.tick_params(axis='both', which='major', labelsize=ticksize, direction='in')
 ax.tick_params(which="both",direction="in")
 
-ax2.tick_params(axis='both', which='major', labelsize=16, direction='in')
+ax2.tick_params(axis='both', which='major', labelsize=ticksize, direction='in')
 ax2.tick_params(which="both",direction="in")
 
-plt.ylabel(r"Brightness temperature [$\mu$K]",fontsize=18)
-plt.xlabel(r"Frequency [GHz]",fontsize=18)
+plt.ylabel(r"Brightness temperature [$\mu$K]",fontsize=labelsize)
+plt.xlabel(r"Frequency [GHz]",fontsize=labelsize)
 
 if long:
     ax2.set_ylim(ymax15,ymax2)
