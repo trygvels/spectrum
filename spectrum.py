@@ -17,12 +17,11 @@ print("pdf           Plot as pdf (png by default).")
 
 
 flags = sys.argv[1:]
-print("flags",flags)
-pol = True if "-pol" in flags else False
-long = True if "-long" in flags else False
-lowfreq = True if "-lowfreq" in flags else False
-darkmode = True if "-darkmode" in flags else False
-filetype = ".pdf" if "-pdf" in flags else ".png"
+pol = True if "pol" in flags else False
+long = True if "long" in flags else False
+lowfreq = True if "lowfreq" in flags else False
+darkmode = True if "darkmode" in flags else False
+filetype = ".pdf" if "pdf" in flags else ".png"
 
 
 params = {'savefig.dpi'        : 300, # save figures to 300 dpi
