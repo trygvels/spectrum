@@ -379,7 +379,9 @@ band_range27  = [1.3945-0.064/2,1.3945+0.064/2]  #CHIPASS
 
 if long:
     yscaletext = 0.80
+    yscaletextup = 1.2
 else:
+    yscaletextup = 1.03
     yscaletext = 0.97
 
 # ---- Plotting single data ----
@@ -430,10 +432,10 @@ if quijote:
 
 # ---- Plotting Planck ----
 if planck:
-    ax2.text(27-2,ymax2*yscaletext,"30",           color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
-    ax2.text(42+2,ymax2*yscaletext,"44",           color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
-    ax2.text(64,  ymax2*yscaletext,"70",           color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
-    ax2.text(90+2,ymax2*yscaletext,"100\nPlanck", color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(27,ymax2*yscaletext,"30",           color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(44-4,ymax2*yscaletext,"44",           color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(64-4,  ymax2*yscaletext,"70",           color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(90,ymax2*yscaletext,"100\nPlanck", color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
     ax2.text(130, ymax2*yscaletext,"143",          color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
     ax2.text(195, ymax2*yscaletext,"217",          color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
     ax2.text(320, ymax2*yscaletext,"353",          color='C1', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
@@ -466,11 +468,11 @@ if planck:
 
 # ---- Plotting WMAP ----
 if wmap:
-    ax2.text(22.8 -2  , ymax2*yscaletext,"K", color='C9' ,va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
-    ax2.text(31.5   ,   ymax2*yscaletext,"Ka\nWMAP ",        color='C9', va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
-    ax2.text(39.  ,     ymax2*yscaletext,"Q",         color='C9' ,va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
-    ax2.text(58.    ,   ymax2*yscaletext,"V",         color='C9' ,va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
-    ax2.text(90.-8   ,  ymax2*yscaletext,"W",         color='C9' ,va='top',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(22.8  -1, ymin*yscaletextup,"WMAP\nK", color='C9' ,va='bottom',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(31.5   ,   ymin*yscaletextup,"Ka ",        color='C9', va='bottom',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(39.  ,     ymin*yscaletextup,"Q",         color='C9' ,va='bottom',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(58.    ,   ymin*yscaletextup,"V",         color='C9' ,va='bottom',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax2.text(90.   ,  ymin*yscaletextup,"W",         color='C9' ,va='bottom',alpha=1, size = freqtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
 
     ax.axvspan(band_range3[0],band_range3[1],color='C9',alpha=baralpha, zorder=0,label='WMAP')
     ax.axvspan(band_range4[0],band_range4[1],color='C9',alpha=baralpha, zorder=0)
