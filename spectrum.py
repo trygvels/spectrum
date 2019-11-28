@@ -6,7 +6,24 @@ import numpy as np
 import sys
 import math
 from brokenaxes import brokenaxes
-#plt.style.use(u"trygveplot_astro")
+
+print()
+print("Available flags:")
+print("pol           Polarization foregrounds.")
+print("long          Longer frequency range.")
+print("lowfreq       Plots as long, but cuts off at 1000 GHz.")
+print("darkmode      Plots with white borders for dark backgorunds.")
+print("pdf           Plot as pdf (png by default).")
+
+
+flags = sys.argv[1:]
+print("flags",flags)
+pol = True if "-pol" in flags else False
+long = True if "-long" in flags else False
+lowfreq = True if "-lowfreq" in flags else False
+darkmode = True if "-darkmode" in flags else False
+filetype = ".pdf" if "-pdf" in flags else ".png"
+
 
 params = {'savefig.dpi'        : 300, # save figures to 300 dpi
           'xtick.top'          : False,
@@ -31,7 +48,18 @@ params = {'savefig.dpi'        : 300, # save figures to 300 dpi
           #'xtick.major.size'   : 6,
           #'xtick.minor.size'   : 3,
           }
-
+black = 'k'
+if darkmode:
+    rcParams['text.color']   = 'white'   # axes background color
+    rcParams['axes.facecolor']   = 'white'   # axes background color
+    rcParams['axes.edgecolor' ]  = 'white'   # axes edge color
+    rcParams['axes.labelcolor']   = 'white'
+    rcParams['xtick.color']    = 'white'      # color of the tick labels
+    rcParams['ytick.color']    = 'white'      # color of the tick labels
+    rcParams['grid.color'] =   'white'   # grid color
+    rcParams['legend.facecolor']    = 'inherit'   # legend background color (when 'inherit' uses axes.facecolor)
+    rcParams['legend.edgecolor']= 'white' # legend edge color (when 'inherit' uses axes.edgecolor)
+    black = 'white'
 rcParams.update(params)
 
 h    = 6.62607e-34 # Planck's konstant
@@ -97,9 +125,6 @@ def lf(nu,Alf,betalf):
 
 
 # ---- Calculating spectra ----
-pol = False
-long = True
-lowfreq = False
 
 N = 1000
 nu    = np.logspace(np.log10(0.1),np.log10(5000),N) #Text scaled to 0.2, 5000
@@ -190,7 +215,7 @@ if long:
 
     # ---- Adding broken axis lines ----
     d = .005  # how big to make the diagonal lines in axes coordinates
-    kwargs = dict(transform=ax2.transAxes, color='k', clip_on=False)
+    kwargs = dict(transform=ax2.transAxes, color=black, clip_on=False)
     ax2.plot((-d, +d), (-d*ratio, + d*ratio), **kwargs)        # top-left diagonal
     ax2.plot((1 - d, 1 + d), (-d*ratio, +d*ratio), **kwargs)  # top-right diagonal
     kwargs.update(transform=ax.transAxes)  # switch to the bottom axes
@@ -280,10 +305,10 @@ dirbe = True
 #scale=[5,105,195] # Scaling CMB, thermal dust and sum up and down
 
 
-ax.loglog(nu,sumf[0], "--", linewidth=2, color='k', alpha=0.7)
-ax.loglog(nu,sumf[1], "--", linewidth=2, color='k', alpha=0.7)
-ax2.loglog(nu,sumf[0], "--", linewidth=2, color='k', alpha=0.7)
-ax2.loglog(nu,sumf[1], "--", linewidth=2, color='k', alpha=0.7)
+ax.loglog(nu,sumf[0], "--", linewidth=2, color=black, alpha=0.7)
+ax.loglog(nu,sumf[1], "--", linewidth=2, color=black, alpha=0.7)
+ax2.loglog(nu,sumf[0], "--", linewidth=2, color=black, alpha=0.7)
+ax2.loglog(nu,sumf[1], "--", linewidth=2, color=black, alpha=0.7)
 # ---- Plotting foregrounds and labels ----
 j=0
 for i in range(len(fgs)):
@@ -300,7 +325,7 @@ for i in range(len(fgs)):
     ax2.set_yscale("log")
 
 # ---- Plotting sum of all foregrounds ----        
-ax.text(nu[idx[-1]], fgs[-1][1,idx[-1]]+scale[-1], label[-1], rotation=rot[-1], color='k', fontsize=fgtext, alpha=0.7,  path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+ax.text(nu[idx[-1]], fgs[-1][1,idx[-1]]+scale[-1], label[-1], rotation=rot[-1], color=black, fontsize=fgtext, alpha=0.7,  path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
 
 
 def find_nearest(array, value):
@@ -316,13 +341,13 @@ if not pol:
     co21amp=co10amp*0.5
     co32amp=co10amp*0.2
 
-    ax.bar(115., co10amp, color='k', width=1,)
-    ax.bar(230., co21amp, color='k', width=2,)
-    ax.bar(345., co32amp, color='k', width=3,)
+    ax.bar(115., co10amp, color=black, width=1,)
+    ax.bar(230., co21amp, color=black, width=2,)
+    ax.bar(345., co32amp, color=black, width=3,)
     
-    ax.text(115.*0.99,co10amp*0.33, r"CO$_{1\rightarrow 0}$", color='k', alpha=0.7, ha='right',va='top',rotation=90,fontsize=fgtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
-    ax.text(230.*0.99,co21amp*0.33, r"CO$_{2\rightarrow 1}$", color='k', alpha=0.7, ha='right',va='top',rotation=90,fontsize=fgtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
-    ax.text(345.*0.99,co32amp*0.33, r"CO$_{3\rightarrow 2}$", color='k', alpha=0.7, ha='right',va='top',rotation=90,fontsize=fgtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax.text(115.*0.99,co10amp*0.33, r"CO$_{1\rightarrow 0}$", color=black, alpha=0.7, ha='right',va='top',rotation=90,fontsize=fgtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax.text(230.*0.99,co21amp*0.33, r"CO$_{2\rightarrow 1}$", color=black, alpha=0.7, ha='right',va='top',rotation=90,fontsize=fgtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
+    ax.text(345.*0.99,co32amp*0.33, r"CO$_{3\rightarrow 2}$", color=black, alpha=0.7, ha='right',va='top',rotation=90,fontsize=fgtext, path_effects=[path_effects.withSimplePatchShadow(offset=(1, -1))])
 
 # ---- Data band ranges ----
 band_range1   = [.406,.410]      # Haslam?
@@ -503,7 +528,9 @@ filename ="figs/spectrum"
 filename += "_pol" if pol else ""
 filename += "_long" if long else ""
 filename += "_lowfreq" if lowfreq else ""
-plt.savefig(filename+".png", bbox_inches='tight',  pad_inches=0.02)
+filename += "_darkmode" if darkmode else ""
+print("Plotting {}".format(filename))
+plt.savefig(filename+filetype, bbox_inches='tight',  pad_inches=0.02, transparent=True)
 #plt.show()
 
 
