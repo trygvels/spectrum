@@ -15,6 +15,4 @@ It was made by Trygve.
 ![Masterpiece](https://github.com/trygvels/spectrum/blob/master/figs/spectrum_pol_long.png)
 
 ## DARKMODE!
-<span style="color:black">
 ![Masterpiece](https://github.com/trygvels/spectrum/blob/master/figs/spectrum_darkmode.png)
-</span>
