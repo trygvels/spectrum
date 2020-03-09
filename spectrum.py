@@ -254,18 +254,18 @@ if pol:
     #SYNC  = sync( nu*1e9, 12,1., nuref=30.)
     #TDUST = tdust(nu*1e9, 8, 1.51,21.,nuref=353. )
     
-    sumf = SYNC+TDUST
-    fgs=[CMB,SYNC,TDUST]
-    col=["C9","C2","C3","C7"]
-    label=["CMB", "Synchrotron","Thermal Dust", "Sum fg."]
+    sumf = SYNC+TDUST+SDUST*0.01
+    fgs=[CMB,SYNC,TDUST,SDUST*0.01]
+    col=["C9","C2","C3","C1","C7"]
+    label=["CMB", "Synchrotron","Thermal Dust", "Spinning Dust", "Sum fg."]
     if long:
-        rot=[-25, -51,22, -10] 
-        idx=[70, -120,  115, -15]
-        scale=[0.05, 0, 13.5, 2]
+        rot=[-25, -51, 22, 10, -10] 
+        idx=[70, -120,  115, -215, -15]
+        scale=[0.05, 0, 13.5, 1.5, 3]
     else:
-        rot=[-20, -45, 18, -10]
-        idx=[70, -120,  115, -15]
-        scale=[0.05, 0, 10, 2]
+        rot=[-20, -45, 18, -15, -10]
+        idx=[70, -120,  115, -145, -15]
+        scale=[0.05, 0, 10, 0.5, 3]
 
 
 else:
